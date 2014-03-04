@@ -68,7 +68,21 @@ test_that("smearing numeric is independent of whether from or to is larger", {
 
 
 
+context("smear vs smear_simple")
 
+
+test_that("smear and smear_simple return the same results", {
+  
+  set.seed(42)
+  x <- runif(10000)
+  
+  smear_x <- function (...) {smear(x, ...)}
+  
+  expect_that(smear_x(0,1),   is_identical_to(smear_simple(x,0,1)))
+  expect_that(smear_x(-10,10),   is_identical_to(smear_simple(x,-10,10)))
+  expect_that(smear_x(10,11),   is_identical_to(smear_simple(x,10,11)))
+  expect_that(smear_x(-73,73),   is_identical_to(smear_simple(x,-73,73)))
+})
 
 
 
