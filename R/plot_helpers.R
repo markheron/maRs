@@ -108,6 +108,35 @@ ruler_axis <- function(side=1, data=NULL) {
 }
 
 
+helper_heatmap_axis <- function(side=1, at, z_range=range(labels), labels, ...) {
+  if(class(labels) == "numeric" || class(labels) == "integer") {
+    labs_pretty <- pretty(labels)
+    axis(side=side, at=(labs_pretty-z_range[1])/(-z_range[1]+z_range[2]) , labels=labs_pretty, ...)
+  } else {
+    axis(side=side, at=at, labels=labels, ...)
+  }
+}
+
+
+#' plotHeatmap
+#' 
+#' @export
+plotHeatmap <- function(x=1:ncol(z),y=1:nrow(z),z, colour_range=range(z), colour_steps=1000) {  
+  
+  breaks <- c(min(z, colour_range[1], na.rm=T), seq(from=colour_range[1], to=colour_range[2], length=colour_steps), max(z, colour_range[2], na.rm=T))
+  colour_scale <- colorRampPalette(c("blue", "white", "red"))(colour_steps+1)
+  
+  
+  par(mar=c(0,0,0,0),fig=c(0.92,0.94,0.7,0.9),cex.axis=1.3)
+  image(x=1,y=seq(from=colour_range[1], to=colour_range[2], length=colour_steps),z=matrix(1:colour_steps,nrow=1),col=colour_scale,xaxt='n',yaxt='n',ylab="",xlab="")
+  axis(side=4,las=1)
+  
+  par(mar=c(0,0,0,0),fig=c(0.2,0.9,0.25,0.95),cex.axis=1.5,new=TRUE)
+  image(t(z)[,nrow(z):1], col=colour_scale, breaks=breaks,axes=FALSE)
+  helper_heatmap_axis(side=1,at=seq(0,1,length.out=length(x)),labels=x,las=1,tick=TRUE)
+  helper_heatmap_axis(side=2,at=seq(0,1,length.out=length(y)),labels=y,las=1,tick=FALSE)
+}
+
 
 
 #' Demo plot for palett

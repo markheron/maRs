@@ -1,0 +1,14 @@
+Package: maRs
+Type: Package
+Title: Mark's awesome R scripts
+Version: 0.1
+Date: 2014-03-03
+Author: Mark Heron
+Maintainer: Mark Heron <heron@genzentrum.lmu.de>
+Description: ...
+License: GPL-3
+Imports:
+    ff,
+    ffbase
+Suggests:
+    testthat
