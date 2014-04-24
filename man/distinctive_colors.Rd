@@ -1,0 +1,34 @@
+\name{distinctive_colors}
+\alias{distinctive_colors}
+\title{Distinctive color palett}
+\usage{
+distinctive_colors(n, method = "hsv_split", four_colours = "motif")
+}
+\arguments{
+  \item{n}{(int) number of colors to produce}
+
+  \item{method}{(character) "hsv_split" or "rgb_split";
+  "hsv_split" creats four sets
+  ("normal","grayish","dark","light") of rainbow colours
+  (even split of hue), "rgb_split" picks colors from an
+  evenly spaced grid in the rgb color cube}
+
+  \item{four_colours}{(character) should n=4 be treated
+  specialy as the typical PWM nucleotide colours
+  (\code{"motif"}) or the old colour scheme (\code{"old"})}
+}
+\value{
+vector of the selected colors
+}
+\description{
+Produces a selection of distinct colors for plots with many
+>15 lines
+}
+\examples{
+col=distinctive_colors(32)
+demo.pal(col=distinctive_colors(32))
+}
+\seealso{
+demo.pal
+}
+

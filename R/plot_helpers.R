@@ -77,15 +77,25 @@ distinctive_colors <- function(n, method="hsv_split", four_colours="motif") {
 
 
 
+scale_to_zero_one_range <- function(x, x_range=range(x))  {
+  
+  if(length(x_range) == 0) {
+    return(x)
+  } else if(length(x_range) != 2) {
+    warning("x_range is neither NULL nor of length 2")
+  }
+  return( (x-x_range[1])/(x_range[2]-x_range[1]) )
+}
+
 
 ##' ruler_axis
 ##'
-##' Adds an axis that looks like a ruler (with minor ticks without labels).
+##' Adds an axis that looks like a ruler (with minor ticks without labels between the large ticks).
 ##' @export
 ##' @param side to add the axis to
 ##' @param data to better estimate the start/end of the axis (if not present it uses the plot dimensions)
 ##' @author Mark Heron
-ruler_axis <- function(side=1, data=NULL) {
+ruler_axis <- function(side=1, axis_range_to_zero_one=NULL, data=NULL) {
   
   axis_p <- c()
   if(length(data) > 0) {
@@ -97,51 +107,80 @@ ruler_axis <- function(side=1, data=NULL) {
   }
   
   p_5 <- pretty(axis_p, 5)
-  axis(side, p_5 , lwd=0,  lwd.ticks=1)
-  p_10 <- setdiff(pretty(axis_p, 10, u5.bias=10), pretty(axis_p, 5))
+  p_10 <- setdiff(pretty(axis_p, 10, u5.bias=10), p_5)
+  p_25 <- setdiff(pretty(axis_p, 25), p_5)
+  p_50 <- setdiff(pretty(axis_p, 50), union(p_10, p_5))
+  
+  axis(side, at=scale_to_zero_one_range(p_5, axis_range_to_zero_one), labels=p_5, lwd=0, lwd.ticks=1)
   if( length(p_10) == 0) {
-    axis(side, setdiff(pretty(axis_p, 25), p_5), labels=FALSE, tcl=-0.2)
+    axis(side, at=scale_to_zero_one_range(p_25, axis_range_to_zero_one), lwd=0, lwd.ticks=1, labels=FALSE, tcl=-0.2)
   } else {
-    axis(side, p_10, lwd=0, lwd.ticks=1, labels=FALSE, tcl=-0.4)
-    axis(side, setdiff(pretty(axis_p, 50), union(p_10, p_5)), labels=FALSE, tcl=-0.2)
+    axis(side, at=scale_to_zero_one_range(p_10, axis_range_to_zero_one), lwd=0, lwd.ticks=1, labels=FALSE, tcl=-0.4)
+    axis(side, at=scale_to_zero_one_range(p_50, axis_range_to_zero_one), lwd=0, lwd.ticks=1, labels=FALSE, tcl=-0.2)
   }
+  axis(side, labels=FALSE, lwd.ticks=0)
 }
 
-
-helper_heatmap_axis <- function(side=1, at, z_range=range(labels), labels, ...) {
+heatmap_axis <- function(side=1, axis_range=range(labels), labels, ruler_axis=TRUE, ...) {
   if(class(labels) == "numeric" || class(labels) == "integer") {
     labs_pretty <- pretty(labels)
-    axis(side=side, at=(labs_pretty-z_range[1])/(-z_range[1]+z_range[2]) , labels=labs_pretty, ...)
+    if(ruler_axis) {
+      ruler_axis(side=side, axis_range_to_zero_one=axis_range, data=labels)
+    } else {
+      axis(side=side, at=scale_to_zero_one_range(labs_pretty, z_range) , labels=labs_pretty, tick=TRUE, ...)
+    }
   } else {
-    axis(side=side, at=at, labels=labels, ...)
+    axis(side=side, at=at, labels=labels, tick=FALSE, ...)
   }
 }
 
 
 #' plotHeatmap
 #' 
+#' Mark's version of a nice heatmap function:
+#'  - the matrix is ploted in the same configuration as it is represented in R
+#'  - there is a colour scale on the top right
+#'  - the scales are not percentages and are made pretty if the provided values are integers/numeric
+#'  - the label margins can be set
+#'  
+#' @param z matrix of values to be plotted in the heatmap
+#' @param x labels for the x axis
+#' @param y labels for the y axis
+#' @param colour_range numeric range for the colours of the heatmap
+#' @param colour_range_symetric boolean if the colour range should be made symetric around zero
+#' @param colour_steps how many different colours should be used
+#' @paran colour_spectrum the major colours that should be used for the heatmap
+#' @param label_spaces space for the x and y axis labels in percent of the complete figure size
+#' @param main title of the figure
+#' 
 #' @export
-plotHeatmap <- function(x=1:ncol(z),y=1:nrow(z),z, colour_range=range(z), colour_steps=1000) {  
+plotHeatmap <- function(z,x=1:ncol(z),y=1:nrow(z), colour_range=range(z), colour_range_symetric=FALSE, colour_steps=1000, colour_spectrum=c("blue", "white", "red"), label_spaces=c(0.1,0.1), main="") {  
+  
+  if(colour_range_symetric) {
+    colour_range <- rep(max(abs(colour_range), na.rm=T),2) * c(-1,1)
+  } 
   
   breaks <- c(min(z, colour_range[1], na.rm=T), seq(from=colour_range[1], to=colour_range[2], length=colour_steps), max(z, colour_range[2], na.rm=T))
-  colour_scale <- colorRampPalette(c("blue", "white", "red"))(colour_steps+1)
+  colour_scale <- colorRampPalette(colour_spectrum)(colour_steps+1)
   
   
-  par(mar=c(0,0,0,0),fig=c(0.92,0.94,0.7,0.9),cex.axis=1.3)
+  par(mar=c(0,0,0,0),fig=c(0.87,0.89,0.65,0.85),cex.axis=1.3)
   image(x=1,y=seq(from=colour_range[1], to=colour_range[2], length=colour_steps),z=matrix(1:colour_steps,nrow=1),col=colour_scale,xaxt='n',yaxt='n',ylab="",xlab="")
   axis(side=4,las=1)
   
-  par(mar=c(0,0,0,0),fig=c(0.2,0.9,0.25,0.95),cex.axis=1.5,new=TRUE)
+  par(mar=c(0,0,0,0),fig=c(label_spaces[1],0.85,label_spaces[2],0.90),cex.axis=1.5,new=TRUE)
   image(t(z)[,nrow(z):1], col=colour_scale, breaks=breaks,axes=FALSE)
-  helper_heatmap_axis(side=1,at=seq(0,1,length.out=length(x)),labels=x,las=1,tick=TRUE)
-  helper_heatmap_axis(side=2,at=seq(0,1,length.out=length(y)),labels=y,las=1,tick=FALSE)
+  title(main=main, outer=TRUE, line=-2)
+  heatmap_axis(side=1,labels=x,las=1)
+  heatmap_axis(side=2,labels=y,las=1)
 }
 
 
 
-#' Demo plot for palett
+#' Demo plot for palette
 #' 
-#' Simply plots rectangles with the palett colours
+#' Simply plots rectangles with the palette colours.
+#' Method idea and initial code from LSD's package.
 #' 
 #' @export
 #' @param colours color palett

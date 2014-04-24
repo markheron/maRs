@@ -1,0 +1,34 @@
+\name{running_mean}
+\alias{running_mean}
+\title{running mean}
+\usage{
+running_mean(vec, smooth, ...)
+}
+\arguments{
+  \item{vec}{(numeric) vector to smooth}
+
+  \item{smooth}{(int) the smothing window size}
+
+  \item{...}{parameters to forward to mean}
+}
+\value{
+smoothed vector
+}
+\description{
+Computes the running mean of a vector.
+}
+\details{
+The vector \code{vec} is smoothed by computing the mean for
+a centered running window of the size \code{smooth}. The
+first and last positions are repeats of the outermost
+positiones for which the window still fit. If \code{smooth}
+is an even number, the window is extended further to the
+end.
+}
+\examples{
+running_mean(1:10, 3)
+}
+\seealso{
+running_mean_matrix
+}
+
