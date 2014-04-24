@@ -4,13 +4,13 @@
 #' returns a list of all files in the \code{folder}
 #' 
 #' @export
-#' @param folder to return the files for
+#' @param folder (char) to return the files for
+#' @param ... further parameters passed to dir()
 #' @return list of file names
-get_files <- function(folder) {
+get_files <- function(folder=".", ...) {
   
-  files_unfiltered <- dir(folder)
-  files_unfiltered <- files_unfiltered[file.info(paste0(folder,files_unfiltered))$isdir == FALSE]
-  return(files_unfiltered)
+  files_unfiltered <- dir(folder, ...)
+  return(files_unfiltered[file.info(paste0(folder,"/",files_unfiltered))$isdir == FALSE])
 }
 
 

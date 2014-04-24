@@ -13,6 +13,8 @@ NULL
 #'
 #' Computes the running mean of a vector.
 #' 
+#' Somewhat deprecated, smear is faster and should be used instead (or this function should be reimplemented using smear).
+#' 
 #' The vector \code{vec} is smoothed by computing the mean for a centered running window of the size \code{smooth}.
 #' The first and last positions are repeats of the outermost positiones for which the window still fit.
 #' If \code{smooth} is an even number, the window is extended further to the end.
@@ -44,6 +46,8 @@ running_mean <- function(vec, smooth, ...) {
 #'
 #' Computes the running mean over one dimension of a matrix.
 #' 
+#' Should be updated to use speed up also used with smear, or reimplemented using (still to be implemented) smear_matrix
+#' 
 #' The matrix \code{mat} is smoothed by computing the mean for a centered running window of the size \code{smooth} allong each row or column.
 #' The first and last positions are repeats of the outermost positiones for which the window still fit.
 #' If \code{smooth} is an even number, the window is extended further to the end.
@@ -66,7 +70,7 @@ running_mean_matrix <- function(mat, smooth, over="rows") {
   if(smooth > 0) {
     if(smooth < dim(mat)[1]) {
       smoothed <- cbind( sapply(1:(dim(mat)[1]-smooth), function (i) {colMeans(mat[i:(i+smooth),])})
-                         ,matrix(colMeans(mat[(dim(mat)[1]-smooth):(dim(mat)[1]),]), dim(mat)[2] ,ceiling(smooth/2) ))
+                         ,matrix(colMeans(mat[(dim(mat)[1]-smooth):(dim(mat)[1]),]), dim(mat)[2], ceiling(smooth/2) ))
       if(smooth > 1) {
         smoothed <- cbind( matrix(colMeans(mat[1:(1+smooth),]),dim(mat)[2],floor(smooth/2) ), smoothed)
       }

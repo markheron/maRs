@@ -1,0 +1,22 @@
+\name{ram_objects_summary}
+\alias{ram_objects_summary}
+\title{Print size of workspace objects nicely}
+\usage{
+ram_objects_summary(sorted = TRUE, min_size = 1e+06)
+}
+\arguments{
+  \item{sorted}{(bool) should the objects be sorted by size
+  (otherwise by name)}
+
+  \item{min_size}{(int) minimal byte size for an objects to
+  be printed individualiy}
+}
+\description{
+Prints a table of name and size of all objects larger than
+\code{min_size}.
+}
+\examples{
+x <- rep(0,10^7)
+ram_objects_summary()
+}
+

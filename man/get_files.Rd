@@ -1,0 +1,18 @@
+\name{get_files}
+\alias{get_files}
+\title{get files}
+\usage{
+get_files(folder = ".", ...)
+}
+\arguments{
+  \item{folder}{(char) to return the files for}
+
+  \item{...}{further parameters passed to dir()}
+}
+\value{
+list of file names
+}
+\description{
+returns a list of all files in the \code{folder}
+}
+

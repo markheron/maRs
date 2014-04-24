@@ -36,7 +36,8 @@ smear_simple <- function(x, from=0, to=1) {
 ##'
 ##' Computes a smeared vector, basically a running_sum.
 ##' 
-##' add's the vector on its self several times, so good for short smears of long vectors
+##' Add's the vector on its self several times, uses a tree/recursive like approach so the time complexity is only log(to-from).
+##' The start and end will end up with smaller values on average, since the ends are extended with zeros.
 ##'
 ##' @export
 ##' @param x vector to smear

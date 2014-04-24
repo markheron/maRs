@@ -5,7 +5,7 @@ Version: 0.1
 Date: 2014-03-03
 Author: Mark Heron
 Maintainer: Mark Heron <heron@genzentrum.lmu.de>
-Description: ...
+Description: Several awesome helper functions implemented by Mark!
 License: GPL-3
 Imports:
     ff,
