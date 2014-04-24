@@ -130,7 +130,7 @@ heatmap_axis <- function(side=1, axis_range=range(labels), labels, ruler_axis=TR
       axis(side=side, at=scale_to_zero_one_range(labs_pretty, z_range) , labels=labs_pretty, tick=TRUE, ...)
     }
   } else {
-    axis(side=side, at=at, labels=labels, tick=FALSE, ...)
+    axis(side=side, at=seq(0,1,out.length=length(labels)), labels=labels, tick=FALSE, ...)
   }
 }
 
