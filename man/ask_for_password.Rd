@@ -1,0 +1,11 @@
+\name{ask_for_password}
+\alias{ask_for_password}
+\title{ask_for_password}
+\usage{
+ask_for_password()
+}
+\description{
+function that gets a password from the console without
+showing it. (I hope)
+}
+

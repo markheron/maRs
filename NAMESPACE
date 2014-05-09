@@ -1,3 +1,4 @@
+export(ask_for_password)
 export(demo.pal)
 export(distinctive_colors)
 export(get_files)

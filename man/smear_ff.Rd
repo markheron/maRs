@@ -15,7 +15,7 @@ smear_ff(x, from = 0, to = 1)
 smeared ff vector
 }
 \description{
-Computes a smeared vector, basically a running_sum.
+Computes a smeared ff vector, basically a running_sum.
 }
 \details{
 Add's the vector on its self several times, so good for

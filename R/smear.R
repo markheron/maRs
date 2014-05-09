@@ -32,19 +32,41 @@ smear_simple <- function(x, from=0, to=1) {
 }
 
 
+
+
 ##' smear
+##' 
+##' Computes a smeared version of the data, basically a running_sum.
+##'
+##' Add's the vector on its self several times, uses a tree/recursive like approach so the time complexity is only \code{log(to-from)}.
+##' The start and end will end up with smaller values on average, since the ends are extended with zeros.
+##' 
+##' @export
+##' @param x to smear
+##' @param from where to start
+##' @param to where to go
+##' @return smeared x
+##' 
+##' @seealso \code{\link{smear.numeric}} 
+##' @seealso \code{\link{smear.matrix}}
+smear <- function(x, from=0, to=1) {
+  warning("smear is not implemented for your x class type: ",class(x),"\n x is returned without change!")
+  return(x)
+}
+setGeneric("smear")
+
+##' smear.numeric
 ##'
 ##' Computes a smeared vector, basically a running_sum.
 ##' 
 ##' Add's the vector on its self several times, uses a tree/recursive like approach so the time complexity is only log(to-from).
 ##' The start and end will end up with smaller values on average, since the ends are extended with zeros.
 ##'
-##' @export
-##' @param x vector to smear
+##' @param x numeric vector to smear
 ##' @param from where to start
 ##' @param to where to go
-##' @return smeared ff vector
-smear <- function(x, from=0, to=1) {
+##' @return smeared vector
+smear.numeric <- function(x, from=0, to=1) {
   
   if(from > to) {
     return(smear(x,to,from))
@@ -70,6 +92,52 @@ smear <- function(x, from=0, to=1) {
   }
   return(smeared)
 }
+setMethod("smear", "numeric", smear.numeric)
+
+
+##' smear.matrix
+##'
+##' Computes a smeared matrix along the first dimension, basically a running_sum.
+##' 
+##' Add's the matrix on its self several times, uses a tree/recursive like approach so the time complexity is only log(to-from).
+##' The start and end will end up with smaller values on average, since the ends are extended with zeros.
+##'
+##' @param x matrix to smear
+##' @param from where to start
+##' @param to where to go
+##' @return smeared ff matrix
+smear.matrix <- function(x, from=0, to=1) {
+  
+  if( !is.numeric(x) ) {
+    warning("x is a non numeric matrix!\n x is returned without change!")
+    return(x)
+  }
+  
+  if(from > to) {
+    return(smear(x,to,from))
+  }
+  
+  smooth_len <- to-from+1
+  times <- floor(log2(smooth_len))-1
+  
+  smeared <- rbind( matrix(0, nrow=max(0,from), ncol=ncol(x)) , x, matrix(0,nrow=max(0,-from), ncol=ncol(x)))
+  len_smear <- nrow(smeared)
+  if(times >= 0) {
+    for(iter in 0:times) {
+      i <- 2^iter
+      smeared <- smeared + rbind(matrix(0,nrow=i, ncol=ncol(x)),smeared[1:(len_smear-i),])
+    }
+  }
+  smeared <- smeared[(max(1,1-from)):min(len_smear, len_smear-from),]
+  
+  new_from <- (from+2^floor(log2(smooth_len)))
+  if(new_from <= to) {
+    
+    smeared <- smeared + smear(x, new_from, to)
+  }
+  return(smeared)
+}
+setMethod("smear", "matrix", smear.matrix)
 
 
 
@@ -100,19 +168,20 @@ smear_ff_simple <- function(x, from=0, to=1) {
 
 
 
-##' Computes a smeared vector, basically a running_sum.
+##' smear_ff
+##' 
+##' Computes a smeared ff vector, basically a running_sum.
 ##' 
 ##' Add's the vector on its self several times, so good for short smears of long vectors.
 ##' 
 ##' @export
-##' @title smear_ff
 ##' @param x ff vector to smear
 ##' @param from where to start
 ##' @param to where to go
 ##' @return smeared ff vector
 ##' @importFrom ff as.ff 
 ##' @author Mark Heron
-smear_ff <- function(x, from=0, to=1) {
+smear_ff <- function(x, from=0, to=1) { #_vector
   
   
   if(from > to) {
@@ -139,3 +208,4 @@ smear_ff <- function(x, from=0, to=1) {
   }
   return(as.ff(smeared))
 }
+# setMethod("smear", "ff_vector", smear.ff_vector)
