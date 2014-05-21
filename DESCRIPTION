@@ -8,7 +8,7 @@ Maintainer: Mark Heron <heron@genzentrum.lmu.de>
 Description: Several awesome helper functions implemented by Mark!
 License: GPL-3
 Imports:
-    ff,
-    ffbase
+    methods,
+    ff
 Suggests:
     testthat

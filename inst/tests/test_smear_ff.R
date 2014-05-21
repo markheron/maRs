@@ -1,4 +1,5 @@
 
+library(ff)
 
 context("Smear integers")
 

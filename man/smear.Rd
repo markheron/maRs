@@ -1,11 +1,19 @@
+\docType{methods}
 \name{smear}
 \alias{smear}
+\alias{smear,matrix-method}
+\alias{smear,numeric,matrix-method}
+\alias{smear,numeric-method}
 \title{smear}
 \usage{
 smear(x, from = 0, to = 1)
+
+\S4method{smear}{numeric}(x, from = 0, to = 1)
+
+\S4method{smear}{matrix}(x, from = 0, to = 1)
 }
 \arguments{
-  \item{x}{to smear}
+  \item{x}{numeric data to smear}
 
   \item{from}{where to start}
 
@@ -17,17 +25,23 @@ smeared x
 \description{
 Computes a smeared version of the data, basically a
 running_sum.
+
+smear.numeric
+
+smear.matrix
 }
 \details{
-Add's the vector on its self several times, uses a
-tree/recursive like approach so the time complexity is only
+Add's the data shifted onto itself several times, using a
+tree/recursive approach so the time complexity is only
 \code{log(to-from)}. The start and end will end up with
 smaller values on average, since the ends are extended with
 zeros.
-}
-\seealso{
-\code{\link{smear.numeric}}
 
-\code{\link{smear.matrix}}
+\subsection{if x is numeric vector}{ The vector is shifted
+as expected. }
+
+\subsection{if x is numeric matrix}{ The matrix is shifted
+along the first dimension i.e. the smearing happens along
+the rows. }
 }
 

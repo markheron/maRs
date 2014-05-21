@@ -4,6 +4,8 @@
 ##' 
 ##' @name smear-file
 ##' @author Mark Heron
+##' 
+##' @import methods
 NULL
 
 
@@ -38,34 +40,32 @@ smear_simple <- function(x, from=0, to=1) {
 ##' 
 ##' Computes a smeared version of the data, basically a running_sum.
 ##'
-##' Add's the vector on its self several times, uses a tree/recursive like approach so the time complexity is only \code{log(to-from)}.
+##' Add's the data shifted onto itself several times, using a tree/recursive approach so the time complexity is only \code{log(to-from)}.
 ##' The start and end will end up with smaller values on average, since the ends are extended with zeros.
 ##' 
+##' \subsection{if x is numeric vector}{
+##' The vector is shifted as expected.
+##' }
+##'
+##' \subsection{if x is numeric matrix}{
+##' The matrix is shifted along the first dimension i.e. the smearing happens along the rows.
+##' }
+##' 
 ##' @export
-##' @param x to smear
+##' @param x numeric data to smear
 ##' @param from where to start
 ##' @param to where to go
 ##' @return smeared x
 ##' 
-##' @seealso \code{\link{smear.numeric}} 
-##' @seealso \code{\link{smear.matrix}}
+##' @genericMethods
+##' @aliases smear,numeric,matrix-method
+##' @aliases smear.numeric,smear.matrix
 smear <- function(x, from=0, to=1) {
   warning("smear is not implemented for your x class type: ",class(x),"\n x is returned without change!")
   return(x)
 }
 setGeneric("smear")
 
-##' smear.numeric
-##'
-##' Computes a smeared vector, basically a running_sum.
-##' 
-##' Add's the vector on its self several times, uses a tree/recursive like approach so the time complexity is only log(to-from).
-##' The start and end will end up with smaller values on average, since the ends are extended with zeros.
-##'
-##' @param x numeric vector to smear
-##' @param from where to start
-##' @param to where to go
-##' @return smeared vector
 smear.numeric <- function(x, from=0, to=1) {
   
   if(from > to) {
@@ -92,20 +92,12 @@ smear.numeric <- function(x, from=0, to=1) {
   }
   return(smeared)
 }
+##' smear.numeric
+##' @aliases smear
+##' @rdname smear
 setMethod("smear", "numeric", smear.numeric)
 
 
-##' smear.matrix
-##'
-##' Computes a smeared matrix along the first dimension, basically a running_sum.
-##' 
-##' Add's the matrix on its self several times, uses a tree/recursive like approach so the time complexity is only log(to-from).
-##' The start and end will end up with smaller values on average, since the ends are extended with zeros.
-##'
-##' @param x matrix to smear
-##' @param from where to start
-##' @param to where to go
-##' @return smeared ff matrix
 smear.matrix <- function(x, from=0, to=1) {
   
   if( !is.numeric(x) ) {
@@ -137,6 +129,9 @@ smear.matrix <- function(x, from=0, to=1) {
   }
   return(smeared)
 }
+##' smear.matrix
+##' @aliases smear
+##' @rdname smear
 setMethod("smear", "matrix", smear.matrix)
 
 
