@@ -23,6 +23,9 @@ plotHeatmap(z, x = 1:ncol(z), y = 1:nrow(z), colour_range = range(z),
   \item{colour_steps}{how many different colours should be
   used}
 
+  \item{colour_spectrum}{the major colours that should be
+  used for the heatmap}
+
   \item{label_spaces}{space for the x and y axis labels in
   percent of the complete figure size}
 

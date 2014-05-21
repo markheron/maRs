@@ -93,13 +93,19 @@ scale_to_zero_one_range <- function(x, x_range=range(x))  {
 ##' Adds an axis that looks like a ruler (with minor ticks without labels between the large ticks).
 ##' @export
 ##' @param side to add the axis to
+##' @param axis_range_to_zero_one a range for which the axis labels should be scaled down to a range of \code{c(0,1)}. Needed for \code{\link{image}}, because it's axis always has a range of \code{c(0,1)}.
 ##' @param data to better estimate the start/end of the axis (if not present it uses the plot dimensions)
+##' @param lim axis limits usually set to \code{range(date)} or extracted from \code{par("usr")}
 ##' @author Mark Heron
-ruler_axis <- function(side=1, axis_range_to_zero_one=NULL, data=NULL) {
+ruler_axis <- function(side=1, axis_range_to_zero_one=NULL, data=NULL, lim=NULL) {
+  
+  if(length(data) > 0) {
+    lim <- range(data)
+  }
   
   axis_p <- c()
-  if(length(data) > 0) {
-    axis_p <- range(data)
+  if(length(lim) == 2) {
+    axis_p <- lim
   } else if(side == 1 | side ==3) {
     axis_p <- par("usr")[1:2]
   } else {
@@ -107,9 +113,16 @@ ruler_axis <- function(side=1, axis_range_to_zero_one=NULL, data=NULL) {
   }
   
   p_5 <- pretty(axis_p, 5)
-  p_10 <- setdiff(pretty(axis_p, 10, u5.bias=10), p_5)
-  p_25 <- setdiff(pretty(axis_p, 25), p_5)
-  p_50 <- setdiff(pretty(axis_p, 50), union(p_10, p_5))
+  p_10 <- c()
+  p_25 <- c()
+  p_50 <- c()
+  axis(side, at=scale_to_zero_one_range(p_5, axis_range_to_zero_one), labels=p_5, lwd=0, lwd.ticks=1)
+  if(abs(p_5[2]-p_5[1]) %% 10 == 0 ) {
+    p_10 <- setdiff( seq(p_5[1], p_5[length(p_5)], length.out=(length(p_5)-1)*2+1), p_5)
+    p_50 <- setdiff( seq(p_5[1], p_5[length(p_5)], length.out=(length(p_5)-1)*10+1), p_10)
+  } else if(abs(p_5[2]-p_5[1]) %% 5 == 0 ) {
+    p_25 <- setdiff( seq(p_5[1], p_5[length(p_5)], length.out=(length(p_5)-1)*5+1), p_5)
+  }
   
   axis(side, at=scale_to_zero_one_range(p_5, axis_range_to_zero_one), labels=p_5, lwd=0, lwd.ticks=1)
   if( length(p_10) == 0) {
@@ -118,7 +131,7 @@ ruler_axis <- function(side=1, axis_range_to_zero_one=NULL, data=NULL) {
     axis(side, at=scale_to_zero_one_range(p_10, axis_range_to_zero_one), lwd=0, lwd.ticks=1, labels=FALSE, tcl=-0.4)
     axis(side, at=scale_to_zero_one_range(p_50, axis_range_to_zero_one), lwd=0, lwd.ticks=1, labels=FALSE, tcl=-0.2)
   }
-  axis(side, labels=FALSE, lwd.ticks=0)
+  axis(side, at=scale_to_zero_one_range(c(p_5,p_10,p_25,p_50), axis_range_to_zero_one) ,labels=FALSE, lwd.ticks=0)
 }
 
 
@@ -129,7 +142,7 @@ heatmap_axis <- function(side=1, axis_range=range(labels), labels, ruler_axis=TR
     if(ruler_axis) {
       ruler_axis(side=side, axis_range_to_zero_one=axis_range, data=labels)
     } else {
-      axis(side=side, at=scale_to_zero_one_range(labs_pretty, z_range) , labels=labs_pretty, tick=TRUE, ...)
+      axis(side=side, at=scale_to_zero_one_range(labs_pretty, axis_range) , labels=labs_pretty, tick=TRUE, ...)
     }
   } else {
     axis(side=side, at=seq(0,1,length.out=length(labels)), labels=labels, tick=FALSE, ...)
@@ -151,7 +164,7 @@ heatmap_axis <- function(side=1, axis_range=range(labels), labels, ruler_axis=TR
 #' @param colour_range numeric range for the colours of the heatmap
 #' @param colour_range_symetric boolean if the colour range should be made symetric around zero
 #' @param colour_steps how many different colours should be used
-#' @paran colour_spectrum the major colours that should be used for the heatmap
+#' @param colour_spectrum the major colours that should be used for the heatmap
 #' @param label_spaces space for the x and y axis labels in percent of the complete figure size
 #' @param main title of the figure
 #' 
