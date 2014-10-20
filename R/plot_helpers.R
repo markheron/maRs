@@ -26,10 +26,10 @@ NULL
 #' 
 distinctive_colors <- function(n, method="hsv_split", four_colours="motif") {
   
-  if( (n == 4) & (four_colours == "motif") ) {
-    return(c("green","blue","goldenrod","red")) # colours matching motif letter colours
-  } else if( (n == 4) & (four_colours == "old") ) {
-    return(c("green","blue","red","black")) # my old colours
+  if( (n <= 4) & (four_colours == "motif") ) {
+    return(c("green","blue","goldenrod","red")[1:n] ) # colours matching motif letter colours
+  } else if( (n <= 4) & (four_colours == "old") ) {
+    return(c("green","blue","red","black")[1:n]) # my old colours
     
   } else if(method == "rgb_split") {
     maxvalue <- 255
@@ -186,8 +186,8 @@ plotHeatmap <- function(z,x=1:ncol(z),y=1:nrow(z), colour_range=range(z), colour
   par(mar=c(0,0,0,0),fig=c(label_spaces[1],0.85,label_spaces[2],0.90),cex.axis=1.5,new=TRUE)
   image(t(z)[,nrow(z):1], col=colour_scale, breaks=breaks,axes=FALSE)
   title(main=main, outer=TRUE, line=-2)
-  heatmap_axis(side=1,labels=x,las=1)
-  heatmap_axis(side=2,labels=y,las=1)
+  heatmap_axis(side=1,labels=x,las=1,ruler_axis=!all(x==1:ncol(z)))
+  heatmap_axis(side=2,labels=y,las=1,ruler_axis=!all(y==1:nrow(z)))
 }
 
 

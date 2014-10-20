@@ -1,6 +1,6 @@
 ##' Running mean functions
 ##' 
-##' running mean functions, that also work on a matrix, should probably switch to using the smear functions for speed increase with long vec/mat's.
+##' running mean functions (also for matrix) internally uses the smear functions for speed/space and then divides by the amount of position summed over.
 ##' 
 ##' @name running_mean-file
 ##' @author Mark Heron
@@ -13,12 +13,12 @@ NULL
 #'
 #' Computes the running mean of a vector.
 #' 
-#' Somewhat deprecated, smear is faster and should be used instead (or this function should be reimplemented using smear).
-#' 
 #' The vector \code{vec} is smoothed by computing the mean for a centered running window of the size \code{smooth}.
-#' The first and last positions are repeats of the outermost positiones for which the window still fit.
+#' The first and last positions are smoothed over smaller running windows (i.e. cut off at the beginnig/end of the \code{vec}).
 #' If \code{smooth} is an even number, the window is extended further to the end.
 #'
+#' [USE TO BE: The first and last positions are repeats of the outermost positiones for which the window still fit.]
+#' 
 #' @export
 #' @param vec (numeric) vector to smooth
 #' @param smooth (int) the smothing window size
@@ -32,7 +32,8 @@ running_mean <- function(vec, smooth, ...) {
   smooth <- smooth-1
   if(smooth > 0) {
     if(smooth < length(vec)) {
-      return(c( rep(mean(vec[1:(1+smooth)], ...),floor(smooth/2)) ,sapply(1:(length(vec)-smooth), function (i) {mean(vec[i:(i+smooth)], ...)}), rep(mean(vec[(length(vec)-smooth):(length(vec))], ...)  ,ceiling(smooth/2)) ))
+      return(smear(vec, from=-ceiling(smooth/2), to=floor(smooth/2)) / smear(rep(1,length(vec)), from=-ceiling(smooth/2), to=floor(smooth/2)) )
+      #return(smear(vec, from=-ceiling(smooth/2), to=floor(smooth/2)) / (1+c(ceiling(smooth/2):(smooth), rep((smooth), length(vec)-smooth-2) , (smooth):floor(smooth/2))) )
     } else {
       return(rep(mean(vec, ...),length(vec)))
     }
@@ -46,10 +47,8 @@ running_mean <- function(vec, smooth, ...) {
 #'
 #' Computes the running mean over one dimension of a matrix.
 #' 
-#' Should be updated to use speed up also used with smear, or reimplemented using (still to be implemented) smear_matrix
-#' 
-#' The matrix \code{mat} is smoothed by computing the mean for a centered running window of the size \code{smooth} allong each row or column.
-#' The first and last positions are repeats of the outermost positiones for which the window still fit.
+#' The matrix \code{mat} is smoothed by computing the mean for a centered running window of the size \code{smooth} along each row or column.
+#' The first and last positions are smoothed over smaller running windows (i.e. cut off at the beginnig/end of the \code{mat}).
 #' If \code{smooth} is an even number, the window is extended further to the end.
 #'
 #' @export
@@ -68,20 +67,64 @@ running_mean_matrix <- function(mat, smooth, over="rows") {
     mat <- t(mat)
   }
   if(smooth > 0) {
-    if(smooth < dim(mat)[1]) {
-      smoothed <- cbind( sapply(1:(dim(mat)[1]-smooth), function (i) {colMeans(mat[i:(i+smooth),])})
-                         ,matrix(colMeans(mat[(dim(mat)[1]-smooth):(dim(mat)[1]),]), dim(mat)[2], ceiling(smooth/2) ))
-      if(smooth > 1) {
-        smoothed <- cbind( matrix(colMeans(mat[1:(1+smooth),]),dim(mat)[2],floor(smooth/2) ), smoothed)
-      }
-    } else {
-      smoothed <- sapply(1:(dim(mat)[1]), function (i) {colMeans(mat)})
-    }
+    #if(smooth <= dim(mat)[1]) {
+      
+      smoothed <- smear(mat, from=-ceiling(smooth/2), to=floor(smooth/2)) / smear(rep(1, nrow(mat)), from=-ceiling(smooth/2), to=floor(smooth/2)) 
+      #smoothed <- smear(mat, from=-ceiling(smooth/2), to=floor(smooth/2)) / (1+c(ceiling(smooth/2):(smooth), rep((smooth), nrow(mat)-smooth-2) , (smooth):floor(smooth/2)))
+      
+    #} else {
+    #  smoothed <- t( sapply(1:(dim(mat)[1]), function (i) {colMeans(mat)}) )
+    #}
   } else {
-    smoothed <- t(mat)
+    smoothed <- mat
   }
-  if(over != "columns") {
+  if(over == "columns") {
     smoothed <- t(smoothed)
+  }
+  return(smoothed)
+}
+
+
+
+#' running mean on ff_matrix
+#' 
+#' @export
+#' @seealso running_mean_matirx
+#' @examples
+#' running_mean_ff_matrix(as.ff(matrix(1:16,4,4)), 3, over="rows")
+#' 
+running_mean_ff_matrix <- function(mat, smooth, over="rows") {
+  smooth <- smooth-1
+  
+  if(over == "columns") {
+    mat <- t(mat)
+  } else if (over != "rows") {
+    warning("over parameter neither matches columns nor rows!\n using rows for now!")
+  }
+  
+  if(smooth > 0) {
+    #if(smooth <= dim(mat)[1]) {
+    
+    smoothed <- smear_ff_matrix(mat, from=-ceiling(smooth/2), to=floor(smooth/2)) / as.ff(matrix(rep(smear(rep(1, nrow(mat)), from=-ceiling(smooth/2), to=floor(smooth/2)), ncol(mat), ncol=ncol(mat) )))
+    
+    #smoothed <- as.ff( as.ram(smear_ff_matrix(mat, from=-ceiling(smooth/2), to=floor(smooth/2))) / as.ram(smear(rep(1, nrow(mat)), from=-ceiling(smooth/2), to=floor(smooth/2))))
+    
+    
+#     smoothed <- smear_ff_matrix(mat, from=-ceiling(smooth/2), to=floor(smooth/2))
+#     tmp2 <- smear(rep(1, nrow(mat)), from=-ceiling(smooth/2), to=floor(smooth/2))
+#     for(i in 1:ncol(smoothed)) {
+#       smoothed[,i] <- smoothed[,i]/tmp2[i]
+#     }
+    #smoothed <- ffcolapply( tmp[,i1:i2,drop=FALSE]/tmp2[i1:i2], X=tmp, RETURN=TRUE, CFUN="cmean")
+    
+    #} else {
+    #  smoothed <- t( sapply(1:(dim(mat)[1]), function (i) {colMeans(mat)}) )
+    #}
+  } else {
+    smoothed <- mat
+  }
+  if(over == "columns") {
+    smoothed <- clone(t(smoothed), dimorder=(1:length(dim(smoothed))))
   }
   return(smoothed)
 }

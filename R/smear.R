@@ -38,7 +38,7 @@ smear_simple <- function(x, from=0, to=1) {
 
 ##' smear
 ##' 
-##' Computes a smeared version of the data, basically a running_sum.
+##' Computes a smeared version of the data, basically a running sum.
 ##'
 ##' Add's the data shifted onto itself several times, using a tree/recursive approach so the time complexity is only \code{log(to-from)}.
 ##' The start and end will end up with smaller values on average, since the ends are extended with zeros.
@@ -57,7 +57,6 @@ smear_simple <- function(x, from=0, to=1) {
 ##' @param to where to go
 ##' @return smeared x
 ##' 
-##' @genericMethods
 ##' @aliases smear,numeric,matrix-method
 ##' @aliases smear.numeric,smear.matrix
 smear <- function(x, from=0, to=1) {
@@ -65,6 +64,8 @@ smear <- function(x, from=0, to=1) {
   return(x)
 }
 setGeneric("smear")
+
+
 
 smear.numeric <- function(x, from=0, to=1) {
   
@@ -96,6 +97,7 @@ smear.numeric <- function(x, from=0, to=1) {
 ##' @aliases smear
 ##' @rdname smear
 setMethod("smear", "numeric", smear.numeric)
+
 
 
 smear.matrix <- function(x, from=0, to=1) {
@@ -204,3 +206,48 @@ smear_ff <- function(x, from=0, to=1) { #_vector
   return(as.ff(smeared))
 }
 # setMethod("smear", "ff_vector", smear.ff_vector)
+
+
+
+
+
+
+##' smear_ff_matrix
+##' 
+##' @export
+##' @importFrom ff as.ff
+##' @importFrom ff add 
+##' @author Mark Heron
+smear_ff_matrix <- function(x, from=0, to=1) {
+  
+  if( !("ff_matrix" %in% class(x)) ) {
+    warning("x is not a ff_matrix!\n x is returned without change!")
+    return(x)
+  }
+  
+  if(from > to) {
+    return(smear_ff_matrix(x,to,from))
+  }
+  
+  smooth_len <- to-from+1
+  times <- floor(log2(smooth_len))-1
+  
+  smeared <- as.ff(rbind( matrix(0, nrow=max(0,from), ncol=ncol(x)) , x[], matrix(0,nrow=max(0,-from), ncol=ncol(x))))
+  
+  len_smear <- nrow(smeared)
+  if(times >= 0) {
+    for(iter in 0:times) {
+      i <- 2^iter
+      smeared <- smeared + as.ff(rbind(matrix(0,nrow=i, ncol=ncol(x)),smeared[1:(len_smear-i),]) )
+    }
+  }
+  smeared <- as.ff(smeared[(max(1,1-from)):min(len_smear, len_smear-from),])
+  
+  new_from <- (from+2^floor(log2(smooth_len)))
+  if(new_from <= to) {
+    
+    smeared <- smeared + smear_ff_matrix(x, new_from, to)
+  }
+  return(smeared)
+}
+# setMethod("smear", "matrix", smear.matrix)
