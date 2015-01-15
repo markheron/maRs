@@ -9,6 +9,7 @@ Description: Several awesome helper functions implemented by Mark!
 License: GPL-3
 Imports:
     methods,
-    ff
+    ff,
+    ffbase
 Suggests:
     testthat

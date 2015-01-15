@@ -9,6 +9,7 @@ running_mean_ff_matrix(mat, smooth, over = "rows")
 running mean on ff_matrix
 }
 \examples{
+library(ff)
 running_mean_ff_matrix(as.ff(matrix(1:16,4,4)), 3, over="rows")
 }
 \seealso{

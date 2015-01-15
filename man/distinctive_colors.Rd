@@ -18,7 +18,8 @@ distinctive_colors(n, method = "hsv_split", four_colours = "motif")
 vector of the selected colors
 }
 \description{
-Produces a selection of distinct colors for plots with many >15 lines
+Produces a selection of distinct colors for plots with many >15 lines.
+Inspired by distinctcolors in Bjoern Schwalb's LSD package.
 }
 \examples{
 col=distinctive_colors(32)

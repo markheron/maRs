@@ -88,9 +88,11 @@ running_mean_matrix <- function(mat, smooth, over="rows") {
 
 #' running mean on ff_matrix
 #' 
+#' @import ff
 #' @export
 #' @seealso running_mean_matirx
 #' @examples
+#' library(ff)
 #' running_mean_ff_matrix(as.ff(matrix(1:16,4,4)), 3, over="rows")
 #' 
 running_mean_ff_matrix <- function(mat, smooth, over="rows") {

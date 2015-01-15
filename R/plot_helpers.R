@@ -10,7 +10,8 @@ NULL
 
 #' Distinctive color palett
 #' 
-#' Produces a selection of distinct colors for plots with many >15 lines
+#' Produces a selection of distinct colors for plots with many >15 lines.
+#' Inspired by distinctcolors in Bjoern Schwalb's LSD package.
 #' 
 #' @export
 #' @param n (int) number of colors to produce
@@ -72,11 +73,20 @@ distinctive_colors <- function(n, method="hsv_split", four_colours="motif") {
       pal[13] <- "darkorange"
     }
     return(pal[1:n])
+  } else {
+    warning("Method not known, using a random sampling of colors()")
+    return(sample(colors(), n))
   }
 }
 
 
-
+#' rescale data
+#'
+#' the values of x are rescaled so that x_range goes from 0 to 1
+#' 
+#' @param x data to be rescaled
+#' @param x_range the original range the data can be in, that is mapped to c(0,1)
+#' @author Mark Heron
 scale_to_zero_one_range <- function(x, x_range=range(x))  {
   
   if(length(x_range) == 0) {
@@ -88,7 +98,7 @@ scale_to_zero_one_range <- function(x, x_range=range(x))  {
 }
 
 
-##' ruler_axis
+##' ruler style axis
 ##'
 ##' Adds an axis that looks like a ruler (with minor ticks without labels between the large ticks).
 ##' @export
@@ -135,7 +145,15 @@ ruler_axis <- function(side=1, axis_range_to_zero_one=NULL, data=NULL, lim=NULL)
 }
 
 
-
+#' heatmap_axis
+#' 
+#' helper function to automatically plot a heatmap axis that makes sense
+#' 
+#' @param side the axis should be plotted on
+#' @param axis_range numeric range of the axis
+#' @param labels of each row/column (that is all, not just the ones you want plotted)
+#' @param ruler_axis do you want to use the \code{ruler_axis()}?
+#' @param ... further parameters for \code{axis(...)}
 heatmap_axis <- function(side=1, axis_range=range(labels), labels, ruler_axis=TRUE, ...) {
   if(class(labels) == "numeric" || class(labels) == "integer") {
     labs_pretty <- pretty(labels)
