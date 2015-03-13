@@ -29,11 +29,11 @@ NULL
 #' running_mean(1:10, 3)
 #' 
 running_mean <- function(vec, smooth, ...) {
-  smooth <- smooth-1
-  if(smooth > 0) {
-    if(smooth < length(vec)) {
-      return(smear(vec, from=-ceiling(smooth/2), to=floor(smooth/2)) / smear(rep(1,length(vec)), from=-ceiling(smooth/2), to=floor(smooth/2)) )
-      #return(smear(vec, from=-ceiling(smooth/2), to=floor(smooth/2)) / (1+c(ceiling(smooth/2):(smooth), rep((smooth), length(vec)-smooth-2) , (smooth):floor(smooth/2))) )
+  smooth_minus_one <- smooth-1
+  if(smooth_minus_one > 0) {
+    if(smooth_minus_one < length(vec)) {
+      return(smear(vec, from=-ceiling(smooth_minus_one/2), to=floor(smooth_minus_one/2)) / smear(rep(1,length(vec)), from=-ceiling(smooth_minus_one/2), to=floor(smooth_minus_one/2)) )
+      #return(smear(vec, from=-ceiling(smooth_minus_one/2), to=floor(smooth_minus_one/2)) / (1+c(ceiling(smooth_minus_one/2):(smooth_minus_one), rep((smooth_minus_one), length(vec)-smooth_minus_one-2) , (smooth_minus_one):floor(smooth_minus_one/2))) )
     } else {
       return(rep(mean(vec, ...),length(vec)))
     }
@@ -61,15 +61,19 @@ running_mean <- function(vec, smooth, ...) {
 #' running_mean_matrix(matrix(1:16,4,4), 3, over="rows")
 #' 
 running_mean_matrix <- function(mat, smooth, over="rows") {
-  smooth <- smooth-1
   
   if(over == "columns") {
-    mat <- t(mat)
+    return(t(running_mean_matrix(t(mat),smooth, over="rows")))
+  } else if (over != "rows") {
+    warning("over parameter neither matches columns nor rows!\n using rows for now!")
   }
-  if(smooth > 0) {
+  
+  smooth_minus_one <- smooth-1
+  
+  if(smooth_minus_one > 0) {
     #if(smooth <= dim(mat)[1]) {
       
-      smoothed <- smear(mat, from=-ceiling(smooth/2), to=floor(smooth/2)) / smear(rep(1, nrow(mat)), from=-ceiling(smooth/2), to=floor(smooth/2)) 
+      smoothed <- smear(mat, from=-ceiling(smooth_minus_one/2), to=floor(smooth_minus_one/2)) / smear(rep(1, nrow(mat)), from=-ceiling(smooth_minus_one/2), to=floor(smooth_minus_one/2)) 
       #smoothed <- smear(mat, from=-ceiling(smooth/2), to=floor(smooth/2)) / (1+c(ceiling(smooth/2):(smooth), rep((smooth), nrow(mat)-smooth-2) , (smooth):floor(smooth/2)))
       
     #} else {
@@ -78,9 +82,7 @@ running_mean_matrix <- function(mat, smooth, over="rows") {
   } else {
     smoothed <- mat
   }
-  if(over == "columns") {
-    smoothed <- t(smoothed)
-  }
+  
   return(smoothed)
 }
 
@@ -96,18 +98,19 @@ running_mean_matrix <- function(mat, smooth, over="rows") {
 #' running_mean_ff_matrix(as.ff(matrix(1:16,4,4)), 3, over="rows")
 #' 
 running_mean_ff_matrix <- function(mat, smooth, over="rows") {
-  smooth <- smooth-1
   
   if(over == "columns") {
-    mat <- t(mat)
+    return( clone( t(running_mean_ff_matrix(t(mat), smooth, over="rows")), dimorder=(1:length(dim(mat))) ))
+    
   } else if (over != "rows") {
     warning("over parameter neither matches columns nor rows!\n using rows for now!")
   }
+  smooth_minus_one <- smooth-1
   
-  if(smooth > 0) {
+  if(smooth_minus_one > 0) {
     #if(smooth <= dim(mat)[1]) {
     
-    smoothed <- smear_ff_matrix(mat, from=-ceiling(smooth/2), to=floor(smooth/2)) / as.ff(matrix(rep(smear(rep(1, nrow(mat)), from=-ceiling(smooth/2), to=floor(smooth/2)), ncol(mat), ncol=ncol(mat) )))
+    smoothed <- smear_ff_matrix(mat, from=-ceiling(smooth_minus_one/2), to=floor(smooth_minus_one/2)) / as.ff(matrix(rep(smear(rep(1, nrow(mat)), from=-ceiling(smooth_minus_one/2), to=floor(smooth_minus_one/2)), ncol(mat), ncol=ncol(mat) )))
     
     #smoothed <- as.ff( as.ram(smear_ff_matrix(mat, from=-ceiling(smooth/2), to=floor(smooth/2))) / as.ram(smear(rep(1, nrow(mat)), from=-ceiling(smooth/2), to=floor(smooth/2))))
     
@@ -125,8 +128,8 @@ running_mean_ff_matrix <- function(mat, smooth, over="rows") {
   } else {
     smoothed <- mat
   }
-  if(over == "columns") {
-    smoothed <- clone(t(smoothed), dimorder=(1:length(dim(smoothed))))
-  }
+#   if(over == "columns") {
+#     smoothed <- clone(t(smoothed), dimorder=(1:length(dim(smoothed))))
+#   }
   return(smoothed)
 }

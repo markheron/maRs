@@ -4,7 +4,7 @@
 \title{ruler style axis}
 \usage{
 ruler_axis(side = 1, axis_range_to_zero_one = NULL, data = NULL,
-  lim = NULL)
+  lim = range(data))
 }
 \arguments{
 \item{side}{to add the axis to}

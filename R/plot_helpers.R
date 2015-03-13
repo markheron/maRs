@@ -107,14 +107,10 @@ scale_to_zero_one_range <- function(x, x_range=range(x))  {
 ##' @param data to better estimate the start/end of the axis (if not present it uses the plot dimensions)
 ##' @param lim axis limits usually set to \code{range(date)} or extracted from \code{par("usr")}
 ##' @author Mark Heron
-ruler_axis <- function(side=1, axis_range_to_zero_one=NULL, data=NULL, lim=NULL) {
-  
-  if(length(data) > 0) {
-    lim <- range(data)
-  }
+ruler_axis <- function(side=1, axis_range_to_zero_one=NULL, data=NULL, lim=range(data)) {
   
   axis_p <- c()
-  if(length(lim) == 2) {
+  if( (length(data) > 0) & (length(lim) == 2)) {
     axis_p <- lim
   } else if(side == 1 | side ==3) {
     axis_p <- par("usr")[1:2]
@@ -187,25 +183,27 @@ heatmap_axis <- function(side=1, axis_range=range(labels), labels, ruler_axis=TR
 #' @param main title of the figure
 #' 
 #' @export
-plotHeatmap <- function(z,x=1:ncol(z),y=1:nrow(z), colour_range=range(z), colour_range_symetric=FALSE, colour_steps=1000, colour_spectrum=c("blue", "white", "red"), label_spaces=c(0.1,0.1), main="") {  
+plotHeatmap <- function(z,x=as.character(1:ncol(z)),y=as.character(1:nrow(z)), colour_range=range(z), colour_range_symetric=FALSE, colour_steps=1000, colour_spectrum=c("blue", "white", "red"), label_spaces=c(0.1,0.1), main="") {  
   
   if(colour_range_symetric) {
-    colour_range <- rep(max(abs(colour_range), na.rm=T),2) * c(-1,1)
-  } 
+    colour_range_used <- max(abs(colour_range), na.rm=T) * c(-1,1)
+  } else {
+    colour_range_used <- colour_range
+  }
   
-  breaks <- c(min(z, colour_range[1], na.rm=T), seq(from=colour_range[1], to=colour_range[2], length=colour_steps), max(z, colour_range[2], na.rm=T))
+  breaks <- c(min(z, colour_range_used[1], na.rm=T), seq(from=colour_range_used[1], to=colour_range_used[2], length=colour_steps), max(z, colour_range_used[2], na.rm=T))
   colour_scale <- colorRampPalette(colour_spectrum)(colour_steps+1)
   
   
   par(mar=c(0,0,0,0),fig=c(0.87,0.89,0.65,0.85),cex.axis=1.3)
-  image(x=1,y=seq(from=colour_range[1], to=colour_range[2], length=colour_steps),z=matrix(1:colour_steps,nrow=1),col=colour_scale,xaxt='n',yaxt='n',ylab="",xlab="")
+  image(x=1,y=seq(from=colour_range_used[1], to=colour_range_used[2], length=colour_steps),z=matrix(1:colour_steps,nrow=1),col=colour_scale,xaxt='n',yaxt='n',ylab="",xlab="")
   axis(side=4,las=1)
   
   par(mar=c(0,0,0,0),fig=c(label_spaces[1],0.85,label_spaces[2],0.90),cex.axis=1.5,new=TRUE)
   image(t(z)[,nrow(z):1], col=colour_scale, breaks=breaks,axes=FALSE)
   title(main=main, outer=TRUE, line=-2)
   heatmap_axis(side=1,labels=x,las=1,ruler_axis=!all(x==1:ncol(z)))
-  heatmap_axis(side=2,labels=y,las=1,ruler_axis=!all(y==1:nrow(z)))
+  heatmap_axis(side=2,labels=rev(y),las=1,ruler_axis=!all(y==nrow(z):1))
 }
 
 
