@@ -200,9 +200,9 @@ plotHeatmap <- function(z,x=as.character(1:ncol(z)),y=as.character(1:nrow(z)), c
   axis(side=4,las=1)
   
   par(mar=c(0,0,0,0),fig=c(label_spaces[1],0.85,label_spaces[2],0.90),cex.axis=1.5,new=TRUE)
-  image(t(z)[,nrow(z):1], col=colour_scale, breaks=breaks,axes=FALSE)
+  image(t(z)[,nrow(z):1, drop=FALSE], col=colour_scale, breaks=breaks,axes=FALSE)
   title(main=main, outer=TRUE, line=-2)
-  heatmap_axis(side=1,labels=x,las=1,ruler_axis=!all(x==1:ncol(z)))
+  heatmap_axis(side=1,labels=x,las=ifelse( all(nchar(x) < 3),1,2),ruler_axis=!all(x==1:ncol(z)))
   heatmap_axis(side=2,labels=rev(y),las=1,ruler_axis=!all(y==nrow(z):1))
 }
 

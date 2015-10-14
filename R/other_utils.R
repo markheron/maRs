@@ -64,4 +64,4 @@ ask_for_password <- function() {
 }
 
 #library(devtools)
-#install_bitbucket(repo=maRs, username=markheron, auth_user=markheron, password=ask_for_password(), keep_source=TRUE)
+#install_bitbucket(repo="markheron/maRs", auth_user="markheron", password=ask_for_password(), keep_source=TRUE)
