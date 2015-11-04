@@ -63,5 +63,17 @@ ask_for_password <- function() {
   }
 }
 
-#library(devtools)
-#install_bitbucket(repo="markheron/maRs", auth_user="markheron", password=ask_for_password(), keep_source=TRUE)
+
+#' install_marks_package_suite
+#'
+#' installs marks package suite from bitbucket in one go!
+#'
+#' @export
+install_marks_package_suite <- function() {
+  
+  pw <- ask_for_password()
+  devtools::install_bitbucket(repo="markheron/maRs", auth_user="markheron", password=pw, keep_source=TRUE)
+  devtools::install_bitbucket(repo="markheron/pRon", auth_user="markheron", password=pw, keep_source=TRUE)
+  devtools::install_bitbucket(repo="markheron/nuculaR", auth_user="markheron", password=pw, keep_source=TRUE)
+  devtools::install_bitbucket(repo="markheron/nucppp", auth_user="markheron", password=pw, keep_source=TRUE)
+}
