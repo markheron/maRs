@@ -55,8 +55,8 @@ ram_objects_summary <- function(sorted = TRUE, min_size = 1000000) {
 ask_for_password <- function() {
   
   if(Sys.getenv("RSTUDIO") == "1") {
-    warning("ask_for_password doesn't work in R Studio, so it will return \"\"")
-    invisible("")
+    #warning("ask_for_password doesn't work in older R Studio versions")
+    invisible(rstudioapi::askForPassword("Please enter your Password:"))
   } else {
     system("echo Password:")
     invisible(system("stty -echo; read tmp; stty echo; echo $tmp", intern=TRUE))

@@ -180,10 +180,19 @@ heatmap_axis <- function(side=1, axis_range=range(labels), labels, ruler_axis=TR
 #' @param colour_steps how many different colours should be used
 #' @param colour_spectrum the major colours that should be used for the heatmap
 #' @param label_spaces space for the x and y axis labels in percent of the complete figure size
+#' @param with_numbers if the values should be plotted in the heatmapcells or not
+#' @param ... further parameters to image and text
 #' @param main title of the figure
 #' 
 #' @export
-plotHeatmap <- function(z,x=as.character(1:ncol(z)),y=as.character(1:nrow(z)), colour_range=range(z), colour_range_symetric=FALSE, colour_steps=1000, colour_spectrum=c("blue", "white", "red"), label_spaces=c(0.1,0.1), main="") {  
+plotHeatmap <- function(z,x=as.character(1:ncol(z)),y=as.character(1:nrow(z)),
+                        colour_range=range(z, na.rm=TRUE), colour_range_symetric=FALSE, colour_steps=1000, colour_spectrum=c("blue", "white", "red"),
+                        label_spaces=c(0.1,0.1), main="", with_numbers=FALSE, ...) {  
+  
+  par.def <- par(no.readonly = TRUE)
+  in_fig_region <- function(x, fig=par.def$fig) {
+    return( x * rep( c(fig[2]-fig[1], fig[4]-fig[3])  , each=2) + rep( c(fig[1], fig[3])  , each=2) )
+  }
   
   if(colour_range_symetric) {
     colour_range_used <- max(abs(colour_range), na.rm=T) * c(-1,1)
@@ -195,15 +204,21 @@ plotHeatmap <- function(z,x=as.character(1:ncol(z)),y=as.character(1:nrow(z)), c
   colour_scale <- colorRampPalette(colour_spectrum)(colour_steps+1)
   
   
-  par(mar=c(0,0,0,0),fig=c(0.87,0.89,0.65,0.85),cex.axis=1.3)
+  par(mar=c(0,0,0,0),fig=in_fig_region(c(0.87,0.89,0.65,0.85)),cex.axis=1.3)
   image(x=1,y=seq(from=colour_range_used[1], to=colour_range_used[2], length=colour_steps),z=matrix(1:colour_steps,nrow=1),col=colour_scale,xaxt='n',yaxt='n',ylab="",xlab="")
   axis(side=4,las=1)
   
-  par(mar=c(0,0,0,0),fig=c(label_spaces[1],0.85,label_spaces[2],0.90),cex.axis=1.5,new=TRUE)
-  image(t(z)[,nrow(z):1, drop=FALSE], col=colour_scale, breaks=breaks,axes=FALSE)
+  par(mar=c(0,0,0,0),fig=in_fig_region(c(label_spaces[1],0.85,label_spaces[2],0.90)),cex.axis=1.5,new=TRUE)
+  image(t(z)[,nrow(z):1, drop=FALSE], col=colour_scale, breaks=breaks,axes=FALSE, ...)
   title(main=main, outer=TRUE, line=-2)
   heatmap_axis(side=1,labels=x,las=ifelse( all(nchar(x) < 3),1,2),ruler_axis=!all(x==1:ncol(z)))
   heatmap_axis(side=2,labels=rev(y),las=1,ruler_axis=!all(y==nrow(z):1))
+  
+  if(with_numbers) {
+    text(x=rep(seq(0,1,length=ncol(z)),each=nrow(z)),y=rep(seq(1,0,length=nrow(z)),ncol(z)),labels=as.vector(round(z,2)), ...)
+  }
+  
+  par(par.def)
 }
 
 
