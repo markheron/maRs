@@ -5,7 +5,7 @@
 \title{plotHeatmap}
 \usage{
 plotHeatmap(z, x = as.character(1:ncol(z)), y = as.character(1:nrow(z)),
-  colour_range = range(z), colour_range_symetric = FALSE,
+  colour_range = range(z, finite = TRUE), colour_range_symetric = FALSE,
   colour_steps = 1000, colour_spectrum = c("blue", "white", "red"),
   label_spaces = c(0.1, 0.1), main = "", with_numbers = FALSE, ...)
 }

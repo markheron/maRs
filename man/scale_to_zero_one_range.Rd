@@ -4,7 +4,7 @@
 \alias{scale_to_zero_one_range}
 \title{rescale data}
 \usage{
-scale_to_zero_one_range(x, x_range = range(x))
+scale_to_zero_one_range(x, x_range = range(x, finite = TRUE))
 }
 \arguments{
 \item{x}{data to be rescaled}

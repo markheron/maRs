@@ -87,7 +87,7 @@ distinctive_colors <- function(n, method="hsv_split", four_colours="motif") {
 #' @param x data to be rescaled
 #' @param x_range the original range the data can be in, that is mapped to c(0,1)
 #' @author Mark Heron
-scale_to_zero_one_range <- function(x, x_range=range(x))  {
+scale_to_zero_one_range <- function(x, x_range=range(x, finite=TRUE))  {
   
   if(length(x_range) == 0) {
     return(x)
@@ -107,11 +107,15 @@ scale_to_zero_one_range <- function(x, x_range=range(x))  {
 ##' @param data to better estimate the start/end of the axis (if not present it uses the plot dimensions)
 ##' @param lim axis limits usually set to \code{range(date)} or extracted from \code{par("usr")}
 ##' @author Mark Heron
-ruler_axis <- function(side=1, axis_range_to_zero_one=NULL, data=NULL, lim=range(data)) {
+ruler_axis <- function(side=1, axis_range_to_zero_one=NULL, data=NULL, lim=NULL) {
   
   axis_p <- c()
-  if( (length(data) > 0) & (length(lim) == 2)) {
-    axis_p <- lim
+  if( length(data) > 0 ) {
+    if(length(lim) == 2) {
+      axis_p <- lim
+    } else {
+      axis_p <- range(data, finite=TRUE)
+    }
   } else if(side == 1 | side ==3) {
     axis_p <- par("usr")[1:2]
   } else {
@@ -186,7 +190,7 @@ heatmap_axis <- function(side=1, axis_range=range(labels), labels, ruler_axis=TR
 #' 
 #' @export
 plotHeatmap <- function(z,x=as.character(1:ncol(z)),y=as.character(1:nrow(z)),
-                        colour_range=range(z, na.rm=TRUE), colour_range_symetric=FALSE, colour_steps=1000, colour_spectrum=c("blue", "white", "red"),
+                        colour_range=range(z, finite=TRUE), colour_range_symetric=FALSE, colour_steps=1000, colour_spectrum=c("blue", "white", "red"),
                         label_spaces=c(0.1,0.1), main="", with_numbers=FALSE, ...) {  
   
   par.def <- par(no.readonly = TRUE)
