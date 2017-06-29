@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_helpers.R
 \name{plot_helpers}
 \alias{plot_helpers}
-\title{helper functions for ploting!}
+\title{Helper functions for plotting!}
 \description{
 Distincti color selector, ruler axis and a function to display the colors.
 }

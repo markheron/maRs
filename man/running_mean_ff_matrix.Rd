@@ -6,6 +6,13 @@
 \usage{
 running_mean_ff_matrix(mat, smooth, over = "rows")
 }
+\arguments{
+\item{mat}{(ff_matrix) matrix to smooth}
+
+\item{smooth}{(int) the smothing window size}
+
+\item{over}{(character) if the matrix should be smoothed over (i.e. along) the rows (first dimension) or columns (second dimension)}
+}
 \description{
 running mean on ff_matrix
 }

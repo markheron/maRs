@@ -32,7 +32,7 @@ smear.numeric
 smear.matrix
 }
 \details{
-Add's the data shifted onto itself several times, using a tree/recursive approach so the time complexity is only \code{log(to-from)}.
+Adds the data shifted onto itself several times, using a tree/recursive approach so the time complexity is only \strong{log(to-from)}.
 The start and end will end up with smaller values on average, since the ends are extended with zeros.
 
 \subsection{if x is numeric vector}{

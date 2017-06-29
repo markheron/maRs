@@ -1,4 +1,4 @@
-#' helper functions for ploting!
+#' Helper functions for plotting!
 #' 
 #' Distincti color selector, ruler axis and a function to display the colors.
 #' 
@@ -8,10 +8,10 @@ NULL
 
 
 
-#' Distinctive color palett
+#' Distinctive color palette
 #' 
-#' Produces a selection of distinct colors for plots with many >15 lines.
-#' Inspired by distinctcolors in Bjoern Schwalb's LSD package.
+#' Produces a selection of distinct colors for plots with many >15 colors.
+#' Inspired by distinctcolors in Bjoern Schwalb's \emph{LSD} package.
 #' 
 #' @export
 #' @param n (int) number of colors to produce
@@ -82,7 +82,7 @@ distinctive_colors <- function(n, method="hsv_split", four_colours="motif") {
 
 #' rescale data
 #'
-#' the values of x are rescaled so that x_range goes from 0 to 1
+#' The values of x are rescaled so that x_range goes from 0 to 1.
 #' 
 #' @param x data to be rescaled
 #' @param x_range the original range the data can be in, that is mapped to c(0,1)
@@ -101,6 +101,7 @@ scale_to_zero_one_range <- function(x, x_range=range(x, finite=TRUE))  {
 ##' ruler style axis
 ##'
 ##' Adds an axis that looks like a ruler (with minor ticks without labels between the large ticks).
+##' 
 ##' @export
 ##' @param side to add the axis to
 ##' @param axis_range_to_zero_one a range for which the axis labels should be scaled down to a range of \code{c(0,1)}. Needed for \code{\link{image}}, because it's axis always has a range of \code{c(0,1)}.
@@ -148,12 +149,12 @@ ruler_axis <- function(side=1, axis_range_to_zero_one=NULL, data=NULL, lim=NULL,
 
 #' heatmap_axis
 #' 
-#' helper function to automatically plot a heatmap axis that makes sense
+#' Helper function to automatically plot a heatmap axis that makes sense.
 #' 
 #' @param side the axis should be plotted on
 #' @param axis_range numeric range of the axis
 #' @param labels of each row/column (that is all, not just the ones you want plotted)
-#' @param ruler_axis do you want to use the \code{ruler_axis()}?
+#' @param ruler_axis do you want to use the \code{\link{ruler_axis}}?
 #' @param ... further parameters for \code{axis(...)}
 heatmap_axis <- function(side=1, axis_range=range(labels), labels, ruler_axis=TRUE, ...) {
   if(class(labels) == "numeric" || class(labels) == "integer") {
@@ -172,11 +173,13 @@ heatmap_axis <- function(side=1, axis_range=range(labels), labels, ruler_axis=TR
 #' plotHeatmap
 #' 
 #' Mark's version of a nice heatmap function:
-#'  - the matrix is ploted in the same configuration as it is represented in R
-#'  - there is a colour scale on the top right
-#'  - the scales are not percentages and are made pretty if the provided values are integers/numeric
-#'  - the label margins can be set
-#'  
+#' \itemize{
+#'  \item the matrix is ploted in the same configuration as it is represented in R
+#'  \item there is a colour scale on the top right
+#'  \item the scales are not percentages and are made pretty if the provided values are integers/numeric
+#'  \item the label margins can be set
+#' }
+#' 
 #' @param z matrix of values to be plotted in the heatmap
 #' @param x labels for the x axis
 #' @param y labels for the y axis
@@ -231,7 +234,7 @@ plotHeatmap <- function(z,x=as.character(1:ncol(z)),y=as.character(1:nrow(z)),
 #' Demo plot for palette
 #' 
 #' Simply plots rectangles with the palette colours.
-#' Method idea and initial code from LSD's package.
+#' Method idea and initial code from \emph{LSD} package.
 #' 
 #' @export
 #' @param colours color palett

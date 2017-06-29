@@ -12,13 +12,13 @@ NULL
 ##' smear_simple
 ##'
 ##' Computes a smeared vector, basically a running_sum.
+##' Simple (and slow) version used to test against.
 ##' 
-##' add's the vector on its self several times, so good for short smears of long vectors
+##' Adds the vector on its self several times, so good for short smears of long vectors.
 ##'
 ##' @param x vector to smear
-##' @param from where to start
-##' @param to where to go
-##' @return smeared ff vector
+##' @inheritParams smear
+##' @return smeared vector
 smear_simple <- function(x, from=0, to=1) {
   
   if(from > to) {
@@ -40,7 +40,7 @@ smear_simple <- function(x, from=0, to=1) {
 ##' 
 ##' Computes a smeared version of the data, basically a running sum.
 ##'
-##' Add's the data shifted onto itself several times, using a tree/recursive approach so the time complexity is only \code{log(to-from)}.
+##' Adds the data shifted onto itself several times, using a tree/recursive approach so the time complexity is only \strong{log(to-from)}.
 ##' The start and end will end up with smaller values on average, since the ends are extended with zeros.
 ##' 
 ##' \subsection{if x is numeric vector}{
@@ -140,12 +140,10 @@ setMethod("smear", "matrix", smear.matrix)
 
 ##' Computes a smeared vector, basically a running_sum.
 ##' 
-##' Add's the vector on its self several times, so good for short smears of long vectors.
+##' Adds the data shifted onto itself several times, implementation of \code{\link{smear_simple}} for \code{ff_vector}.
 ##' 
 ##' @title smear_ff_simple
-##' @param x ff vector to smear
-##' @param from where to start
-##' @param to where to go
+##' @inheritParams smear_ff
 ##' @return smeared ff vector
 ##' @importFrom ff as.ff 
 ##' @author Mark Heron
@@ -160,7 +158,7 @@ smear_ff_simple <- function(x, from=0, to=1) {
   for(i in from:to) {
     smeared <- smeared + c(rep(0,max(i,0)),x[max(1-i,1):min(len-i,len)],rep(0,-min(i,0)))
   }
-  return(as.ff(smeared))
+  return(ff::as.ff(smeared))
 }
 
 
@@ -169,7 +167,7 @@ smear_ff_simple <- function(x, from=0, to=1) {
 ##' 
 ##' Computes a smeared ff vector, basically a running_sum.
 ##' 
-##' Add's the vector on its self several times, so good for short smears of long vectors.
+##' Adds the data shifted onto itself several times, implementation of \code{\link{smear}} for \code{ff_vector}.
 ##' 
 ##' @export
 ##' @param x ff vector to smear
@@ -179,7 +177,6 @@ smear_ff_simple <- function(x, from=0, to=1) {
 ##' @importFrom ff as.ff 
 ##' @author Mark Heron
 smear_ff <- function(x, from=0, to=1) { #_vector
-  
   
   if(from > to) {
     return(smear_ff(x,to,from))
@@ -203,7 +200,7 @@ smear_ff <- function(x, from=0, to=1) { #_vector
     
     smeared <- smeared + (smear_ff(x, new_from, to)[])
   }
-  return(as.ff(smeared))
+  return(ff::as.ff(smeared))
 }
 # setMethod("smear", "ff_vector", smear.ff_vector)
 
@@ -232,16 +229,16 @@ smear_ff_matrix <- function(x, from=0, to=1) {
   smooth_len <- to-from+1
   times <- floor(log2(smooth_len))-1
   
-  smeared <- as.ff(rbind( matrix(0, nrow=max(0,from), ncol=ncol(x)) , x[], matrix(0,nrow=max(0,-from), ncol=ncol(x))))
+  smeared <- ff::as.ff(rbind( matrix(0, nrow=max(0,from), ncol=ncol(x)) , x[], matrix(0,nrow=max(0,-from), ncol=ncol(x))))
   
   len_smear <- nrow(smeared)
   if(times >= 0) {
     for(iter in 0:times) {
       i <- 2^iter
-      smeared <- smeared + as.ff(rbind(matrix(0,nrow=i, ncol=ncol(x)),smeared[1:(len_smear-i),]) )
+      smeared <- smeared + ff::as.ff(rbind(matrix(0,nrow=i, ncol=ncol(x)),smeared[1:(len_smear-i),]) )
     }
   }
-  smeared <- as.ff(smeared[(max(1,1-from)):min(len_smear, len_smear-from),])
+  smeared <- ff::as.ff(smeared[(max(1,1-from)):min(len_smear, len_smear-from),])
   
   new_from <- (from+2^floor(log2(smooth_len)))
   if(new_from <= to) {

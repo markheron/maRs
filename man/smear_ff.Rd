@@ -20,7 +20,7 @@ smeared ff vector
 Computes a smeared ff vector, basically a running_sum.
 }
 \details{
-Add's the vector on its self several times, so good for short smears of long vectors.
+Adds the data shifted onto itself several times, implementation of \code{\link{smear}} for \code{ff_vector}.
 }
 \author{
 Mark Heron

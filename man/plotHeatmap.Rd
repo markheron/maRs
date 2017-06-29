@@ -34,9 +34,11 @@ plotHeatmap(z, x = as.character(1:ncol(z)), y = as.character(1:nrow(z)),
 }
 \description{
 Mark's version of a nice heatmap function:
- - the matrix is ploted in the same configuration as it is represented in R
- - there is a colour scale on the top right
- - the scales are not percentages and are made pretty if the provided values are integers/numeric
- - the label margins can be set
+\itemize{
+ \item the matrix is ploted in the same configuration as it is represented in R
+ \item there is a colour scale on the top right
+ \item the scales are not percentages and are made pretty if the provided values are integers/numeric
+ \item the label margins can be set
+}
 }
 

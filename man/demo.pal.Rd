@@ -16,7 +16,7 @@ demo.pal(colours, border = (if (n < 32) "light gray" else NA),
 }
 \description{
 Simply plots rectangles with the palette colours.
-Method idea and initial code from LSD's package.
+Method idea and initial code from \emph{LSD} package.
 }
 \examples{
 demo.pal(colours=distinctive_colors(32))

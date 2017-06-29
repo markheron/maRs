@@ -16,8 +16,6 @@ NULL
 #' The vector \code{vec} is smoothed by computing the mean for a centered running window of the size \code{smooth}.
 #' The first and last positions are smoothed over smaller running windows (i.e. cut off at the beginnig/end of the \code{vec}).
 #' If \code{smooth} is an even number, the window is extended further to the end.
-#'
-#' [USE TO BE: The first and last positions are repeats of the outermost positiones for which the window still fit.]
 #' 
 #' @export
 #' @param vec (numeric) vector to smooth
@@ -92,6 +90,8 @@ running_mean_matrix <- function(mat, smooth, over="rows") {
 #' 
 #' @import ff
 #' @export
+#' @param mat (ff_matrix) matrix to smooth
+#' @inheritParams running_mean_matrix
 #' @seealso running_mean_matirx
 #' @examples
 #' library(ff)

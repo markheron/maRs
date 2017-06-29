@@ -15,6 +15,6 @@ get_files(folder = ".", ...)
 list of file names
 }
 \description{
-returns a list of all files in the \code{folder}
+Returns a list of all files in the \code{folder}.
 }
 

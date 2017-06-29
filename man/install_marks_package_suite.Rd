@@ -7,6 +7,6 @@
 install_marks_package_suite()
 }
 \description{
-installs marks package suite from bitbucket in one go!
+Installs Mark's package suite from bitbucket in one go!
 }
 

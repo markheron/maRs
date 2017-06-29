@@ -12,7 +12,7 @@ scale_to_zero_one_range(x, x_range = range(x, finite = TRUE))
 \item{x_range}{the original range the data can be in, that is mapped to c(0,1)}
 }
 \description{
-the values of x are rescaled so that x_range goes from 0 to 1
+The values of x are rescaled so that x_range goes from 0 to 1.
 }
 \author{
 Mark Heron

@@ -1,7 +1,7 @@
 
 #' get files
 #' 
-#' returns a list of all files in the \code{folder}
+#' Returns a list of all files in the \code{folder}.
 #' 
 #' @export
 #' @param folder (char) to return the files for
@@ -49,14 +49,17 @@ ram_objects_summary <- function(sorted = TRUE, min_size = 1000000) {
 
 #' ask_for_password
 #'
-#' function that gets a password from the console without showing it. (I hope)
+#' Function that gets a password from the console without showing it. (without guarantee)
 #'
 #' @export
 ask_for_password <- function() {
   
   if(Sys.getenv("RSTUDIO") == "1") {
-    #warning("ask_for_password doesn't work in older R Studio versions")
-    invisible(rstudioapi::askForPassword("Please enter your Password:"))
+    if (requireNamespace("rstudioapi", quietly = TRUE)) {
+      invisible(rstudioapi::askForPassword("Please enter your Password:"))
+    } else {
+      warning("ask_for_password doesn't work in older R Studio versions")
+    }
   } else {
     system("echo Password:")
     invisible(system("stty -echo; read tmp; stty echo; echo $tmp", intern=TRUE))
@@ -66,7 +69,7 @@ ask_for_password <- function() {
 
 #' install_marks_package_suite
 #'
-#' installs marks package suite from bitbucket in one go!
+#' Installs Mark's package suite from bitbucket in one go!
 #'
 #' @export
 install_marks_package_suite <- function() {

@@ -14,11 +14,11 @@ heatmap_axis(side = 1, axis_range = range(labels), labels,
 
 \item{labels}{of each row/column (that is all, not just the ones you want plotted)}
 
-\item{ruler_axis}{do you want to use the \code{ruler_axis()}?}
+\item{ruler_axis}{do you want to use the \code{\link{ruler_axis}}?}
 
 \item{...}{further parameters for \code{axis(...)}}
 }
 \description{
-helper function to automatically plot a heatmap axis that makes sense
+Helper function to automatically plot a heatmap axis that makes sense.
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_helpers.R
 \name{distinctive_colors}
 \alias{distinctive_colors}
-\title{Distinctive color palett}
+\title{Distinctive color palette}
 \usage{
 distinctive_colors(n, method = "hsv_split", four_colours = "motif")
 }
@@ -19,8 +19,8 @@ distinctive_colors(n, method = "hsv_split", four_colours = "motif")
 vector of the selected colors
 }
 \description{
-Produces a selection of distinct colors for plots with many >15 lines.
-Inspired by distinctcolors in Bjoern Schwalb's LSD package.
+Produces a selection of distinct colors for plots with many >15 colors.
+Inspired by distinctcolors in Bjoern Schwalb's \emph{LSD} package.
 }
 \examples{
 col=distinctive_colors(32)

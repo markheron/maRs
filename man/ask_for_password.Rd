@@ -7,6 +7,6 @@
 ask_for_password()
 }
 \description{
-function that gets a password from the console without showing it. (I hope)
+Function that gets a password from the console without showing it. (without guarantee)
 }
 

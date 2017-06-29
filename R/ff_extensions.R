@@ -9,7 +9,7 @@
 Ops.ff_matrix <- function(e1,e2=NULL) {
   
   if( any(dimorder(e1) != dimorder(e2)) ) {
-    warning("the method isn't doing what you think it is doing!")
+    warning("The method isn't doing what you think it is doing!")
   }
   
   e1_vector <- e1

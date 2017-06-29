@@ -14,12 +14,13 @@ smear_simple(x, from = 0, to = 1)
 \item{to}{where to go}
 }
 \value{
-smeared ff vector
+smeared vector
 }
 \description{
 Computes a smeared vector, basically a running_sum.
+Simple (and slow) version used to test against.
 }
 \details{
-add's the vector on its self several times, so good for short smears of long vectors
+Adds the vector on its self several times, so good for short smears of long vectors.
 }
 

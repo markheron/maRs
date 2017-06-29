@@ -1,10 +1,10 @@
 Package: maRs
 Type: Package
 Title: Mark's awesome R scripts
-Version: 0.1
-Date: 2014-03-03
-Author: Mark Heron
-Maintainer: Mark Heron <heron@genzentrum.lmu.de>
+Version: 0.2
+Date: 2017
+Authors@R: person("Mark", "Heron", email = "heron@genzentrum.lmu.de",
+                  role = c("aut", "cre"))
 Description: Several awesome helper functions implemented by Mark!
 License: GPL-3
 Imports:
@@ -13,5 +13,6 @@ Imports:
     ffbase
 Suggests:
     testthat,
-    devtools
+    devtools,
+    rstudioapi
 RoxygenNote: 5.0.1
