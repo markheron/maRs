@@ -145,7 +145,6 @@ setMethod("smear", "matrix", smear.matrix)
 ##' @title smear_ff_simple
 ##' @inheritParams smear_ff
 ##' @return smeared ff vector
-##' @importFrom ff as.ff 
 ##' @author Mark Heron
 smear_ff_simple <- function(x, from=0, to=1) {
   
@@ -174,7 +173,6 @@ smear_ff_simple <- function(x, from=0, to=1) {
 ##' @param from where to start
 ##' @param to where to go
 ##' @return smeared ff vector
-##' @importFrom ff as.ff 
 ##' @author Mark Heron
 smear_ff <- function(x, from=0, to=1) { #_vector
   
@@ -212,8 +210,9 @@ smear_ff <- function(x, from=0, to=1) { #_vector
 ##' smear_ff_matrix
 ##' 
 ##' @export
-##' @importFrom ff as.ff
 ##' @importFrom ff add 
+##' @param x ff matrix to smear along the rows
+##' @inheritParams smear_ff
 ##' @author Mark Heron
 smear_ff_matrix <- function(x, from=0, to=1) {
   

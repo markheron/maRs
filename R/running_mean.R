@@ -88,7 +88,7 @@ running_mean_matrix <- function(mat, smooth, over="rows") {
 
 #' running mean on ff_matrix
 #' 
-#' @import ff
+#' @import ffbase
 #' @export
 #' @param mat (ff_matrix) matrix to smooth
 #' @inheritParams running_mean_matrix
@@ -100,7 +100,7 @@ running_mean_matrix <- function(mat, smooth, over="rows") {
 running_mean_ff_matrix <- function(mat, smooth, over="rows") {
   
   if(over == "columns") {
-    return( clone( t(running_mean_ff_matrix(t(mat), smooth, over="rows")), dimorder=(1:length(dim(mat))) ))
+    return( ff::clone( t(running_mean_ff_matrix(t(mat), smooth, over="rows")), dimorder=(1:length(dim(mat))) ))
     
   } else if (over != "rows") {
     warning("over parameter neither matches columns nor rows!\n using rows for now!")
@@ -110,7 +110,7 @@ running_mean_ff_matrix <- function(mat, smooth, over="rows") {
   if(smooth_minus_one > 0) {
     #if(smooth <= dim(mat)[1]) {
     
-    smoothed <- smear_ff_matrix(mat, from=-ceiling(smooth_minus_one/2), to=floor(smooth_minus_one/2)) / as.ff(matrix(rep(smear(rep(1, nrow(mat)), from=-ceiling(smooth_minus_one/2), to=floor(smooth_minus_one/2)), ncol(mat), ncol=ncol(mat) )))
+    smoothed <- smear_ff_matrix(mat, from=-ceiling(smooth_minus_one/2), to=floor(smooth_minus_one/2)) / ff::as.ff(matrix(rep(smear(rep(1, nrow(mat)), from=-ceiling(smooth_minus_one/2), to=floor(smooth_minus_one/2)), ncol(mat), ncol=ncol(mat) )))
     
     #smoothed <- as.ff( as.ram(smear_ff_matrix(mat, from=-ceiling(smooth/2), to=floor(smooth/2))) / as.ram(smear(rep(1, nrow(mat)), from=-ceiling(smooth/2), to=floor(smooth/2))))
     

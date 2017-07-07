@@ -71,12 +71,13 @@ ask_for_password <- function() {
 #'
 #' Installs Mark's package suite from bitbucket in one go!
 #'
+#' @param auth_user (character) The bitbucket account used to download the packages (default: "marhheron")
 #' @export
-install_marks_package_suite <- function() {
+install_marks_package_suite <- function(auth_user="markheron") {
   
   pw <- ask_for_password()
-  devtools::install_bitbucket(repo="markheron/maRs", auth_user="markheron", password=pw, keep_source=TRUE)
-  devtools::install_bitbucket(repo="markheron/pRon", auth_user="markheron", password=pw, keep_source=TRUE)
-  devtools::install_bitbucket(repo="markheron/nuculaR", auth_user="markheron", password=pw, keep_source=TRUE)
-  devtools::install_bitbucket(repo="markheron/nucppp", auth_user="markheron", password=pw, keep_source=TRUE)
+  devtools::install_bitbucket(repo="markheron/maRs", auth_user=auth_user, password=pw, keep_source=TRUE)
+  devtools::install_bitbucket(repo="markheron/pRon", auth_user=auth_user, password=pw, keep_source=TRUE)
+  devtools::install_bitbucket(repo="markheron/nuculaR", auth_user=auth_user, password=pw, keep_source=TRUE)
+  devtools::install_bitbucket(repo="markheron/nucppp", auth_user=auth_user, password=pw, keep_source=TRUE)
 }

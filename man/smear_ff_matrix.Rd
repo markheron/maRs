@@ -6,6 +6,13 @@
 \usage{
 smear_ff_matrix(x, from = 0, to = 1)
 }
+\arguments{
+\item{x}{ff matrix to smear along the rows}
+
+\item{from}{where to start}
+
+\item{to}{where to go}
+}
 \description{
 smear_ff_matrix
 }

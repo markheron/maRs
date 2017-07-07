@@ -6,6 +6,9 @@
 \usage{
 \method{Ops}{ff_matrix}(e1, e2 = NULL)
 }
+\arguments{
+\item{e1, e2}{objects}
+}
 \description{
 Ops.ff_matrix
 }

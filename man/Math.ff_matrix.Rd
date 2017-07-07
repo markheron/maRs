@@ -4,7 +4,12 @@
 \alias{Math.ff_matrix}
 \title{Math.ff_matrix}
 \usage{
-\method{Math}{ff_matrix}(e1, e2 = NULL)
+\method{Math}{ff_matrix}(x, ...)
+}
+\arguments{
+\item{x}{object}
+
+\item{\dots}{further arguments passed to methods}
 }
 \description{
 Math.ff_matrix

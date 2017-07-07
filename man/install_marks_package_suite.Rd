@@ -4,9 +4,11 @@
 \alias{install_marks_package_suite}
 \title{install_marks_package_suite}
 \usage{
-install_marks_package_suite()
+install_marks_package_suite(auth_user = "markheron")
+}
+\arguments{
+\item{auth_user}{(character) The bitbucket account used to download the packages (default: "marhheron")}
 }
 \description{
 Installs Mark's package suite from bitbucket in one go!
 }
-

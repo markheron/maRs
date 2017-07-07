@@ -6,6 +6,11 @@
 \usage{
 \method{Summary}{ff_matrix}(e1, ...)
 }
+\arguments{
+\item{e1}{object}
+
+\item{\dots}{further arguments passed to methods}
+}
 \description{
 Summary.ff_matrix
 }
