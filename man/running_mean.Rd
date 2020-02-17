@@ -31,4 +31,3 @@ running_mean(1:10, 3)
 \seealso{
 running_mean_matrix
 }
-

@@ -19,4 +19,3 @@ smear_ff_matrix
 \author{
 Mark Heron
 }
-

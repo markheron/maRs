@@ -25,4 +25,3 @@ demo.pal(colours=distinctive_colors(32))
 \seealso{
 distinctive_colors
 }
-

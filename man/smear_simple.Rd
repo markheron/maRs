@@ -23,4 +23,3 @@ Simple (and slow) version used to test against.
 \details{
 Adds the vector on its self several times, so good for short smears of long vectors.
 }
-

@@ -25,4 +25,3 @@ Adds the data shifted onto itself several times, implementation of \code{\link{s
 \author{
 Mark Heron
 }
-

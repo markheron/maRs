@@ -19,4 +19,3 @@ x <- rep(0,10^7)
 ram_objects_summary()
 
 }
-

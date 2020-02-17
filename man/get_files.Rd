@@ -17,4 +17,3 @@ list of file names
 \description{
 Returns a list of all files in the \code{folder}.
 }
-

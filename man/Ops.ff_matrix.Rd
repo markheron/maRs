@@ -12,4 +12,3 @@
 \description{
 Ops.ff_matrix
 }
-

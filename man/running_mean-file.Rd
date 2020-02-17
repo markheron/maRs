@@ -9,4 +9,3 @@ running mean functions (also for matrix) internally uses the smear functions for
 \author{
 Mark Heron
 }
-

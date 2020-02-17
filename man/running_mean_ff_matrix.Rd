@@ -24,4 +24,3 @@ running_mean_ff_matrix(as.ff(matrix(1:16,4,4)), 3, over="rows")
 \seealso{
 running_mean_matirx
 }
-

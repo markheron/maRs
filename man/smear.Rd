@@ -3,9 +3,9 @@
 \docType{methods}
 \name{smear}
 \alias{smear}
-\alias{smear,matrix-method}
 \alias{smear,numeric,matrix-method}
 \alias{smear,numeric-method}
+\alias{smear,matrix-method}
 \title{smear}
 \usage{
 smear(x, from = 0, to = 1)
@@ -26,10 +26,6 @@ smeared x
 }
 \description{
 Computes a smeared version of the data, basically a running sum.
-
-smear.numeric
-
-smear.matrix
 }
 \details{
 Adds the data shifted onto itself several times, using a tree/recursive approach so the time complexity is only \strong{log(to-from)}.
@@ -43,4 +39,3 @@ The vector is shifted as expected.
 The matrix is shifted along the first dimension i.e. the smearing happens along the rows.
 }
 }
-

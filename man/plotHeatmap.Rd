@@ -4,10 +4,11 @@
 \alias{plotHeatmap}
 \title{plotHeatmap}
 \usage{
-plotHeatmap(z, x = as.character(1:ncol(z)), y = as.character(1:nrow(z)),
-  colour_range = range(z, finite = TRUE), colour_range_symetric = FALSE,
-  colour_steps = 1000, colour_spectrum = c("blue", "white", "red"),
-  label_spaces = c(0.1, 0.1), main = "", with_numbers = FALSE, ...)
+plotHeatmap(z, x = as.character(1:ncol(z)),
+  y = as.character(1:nrow(z)), colour_range = range(z, finite = TRUE),
+  colour_range_symetric = FALSE, colour_steps = 1000,
+  colour_spectrum = c("blue", "white", "red"), label_spaces = c(0.1,
+  0.1), main = "", with_numbers = FALSE, ...)
 }
 \arguments{
 \item{z}{matrix of values to be plotted in the heatmap}
@@ -41,4 +42,3 @@ Mark's version of a nice heatmap function:
  \item the label margins can be set
 }
 }
-

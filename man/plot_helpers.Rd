@@ -9,4 +9,3 @@ Distincti color selector, ruler axis and a function to display the colors.
 \author{
 Mark Heron
 }
-

@@ -9,4 +9,3 @@ smear functions that are fast for long vectors
 \author{
 Mark Heron
 }
-

@@ -24,4 +24,3 @@ Adds an axis that looks like a ruler (with minor ticks without labels between th
 \author{
 Mark Heron
 }
-

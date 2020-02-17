@@ -21,4 +21,3 @@ heatmap_axis(side = 1, axis_range = range(labels), labels,
 \description{
 Helper function to automatically plot a heatmap axis that makes sense.
 }
-

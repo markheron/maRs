@@ -9,4 +9,3 @@ ask_for_password()
 \description{
 Function that gets a password from the console without showing it. (without guarantee)
 }
-

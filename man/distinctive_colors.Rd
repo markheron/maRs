@@ -30,4 +30,3 @@ demo.pal(col=distinctive_colors(32))
 \seealso{
 demo.pal
 }
-

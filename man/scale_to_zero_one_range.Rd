@@ -17,4 +17,3 @@ The values of x are rescaled so that x_range goes from 0 to 1.
 \author{
 Mark Heron
 }
-
